@@ -16,7 +16,7 @@ npm install
 ## Prepare the environment
 
 `.env` is used to configure these scripts.
-You should create it like [env_template](.env.template).
+You should create it from [.env.template](.env.template) file.
 Fill in the fields with your data.
 
 | Field                      | Required | Description                                                    |
