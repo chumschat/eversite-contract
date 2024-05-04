@@ -1,0 +1,36 @@
+pragma ever-solidity  ^0.70.0;
+pragma AbiHeader expire;
+pragma AbiHeader pubkey;
+import "@broxus/contracts/contracts/access/ExternalOwner.tsol";
+import "@broxus/contracts/contracts/libraries/UtilityErrors.tsol";
+import "@broxus/contracts/contracts/utils/RandomNonce.tsol";
+
+contract Eversite is ExternalOwner, RandomNonce {
+
+    mapping(uint8 => TvmCell) content;
+
+    constructor() {
+        require(msg.pubkey() == tvm.pubkey(), UtilityErrors.CALLER_IS_NOT_OWNER);
+        tvm.accept();
+        setOwnership(msg.pubkey());
+    }
+
+    function upload(TvmCell part, uint8 index) onlyOwner public {
+        tvm.accept();
+        content[index] = part;
+    }
+
+    function getDetails()
+    external
+    view
+    returns (
+        mapping(uint8 => TvmCell)
+    ) {
+        return content;
+    }
+
+    function destruct(address dest) onlyOwner public {
+        tvm.accept();
+        selfdestruct(dest);
+    }
+}
